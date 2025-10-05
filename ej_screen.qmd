@@ -1,0 +1,85 @@
+---
+title: "EDS 223: Homework 1"
+subtitle: "Assessing Cancer Risk by % Low Income in Two States"
+author: "Nathalie Bonnet"
+date: 2025-10-6
+format: 
+  pdf:
+    toc: TRUE
+---
+
+```{r}
+# Read in necessary libraries
+library(tidyverse)
+library(sf)
+library(here)
+```
+
+
+```{r}
+# read in geodatabase of EJScreen data at the Census Block Group level
+ejscreen <- sf::st_read(here::here("data", "ejscreen","EJSCREEN_2023_BG_StatePct_with_AS_CNMI_GU_VI.gdb")) 
+```
+
+# Maybe look at the highest average per capita income state vs lowest and map air cancer risk vs. % low income 
+
+```{r}
+# Subsetting to explore low income data by state
+mean_low_income <- ejscreen %>% 
+  group_by(STATE_NAME) %>% 
+  summarise(mean_percent_low_income = mean(LOWINCPCT)) %>% 
+  drop_na(mean_percent_low_income)
+```
+
+```{r}
+# Finding the states/ territories with the lowest average percent low income
+lowest_mean_poverty <- mean_low_income %>%
+  slice_min(mean_percent_low_income, n = 5) %>%
+  select(STATE_NAME, mean_percent_low_income)
+
+head(lowest_mean_poverty, 1) # Showing the state/territory with the lowest average low income percentage
+```
+The U.S territory with the lowest mean percent low income is the U.S Virgin Islands
+
+
+```{r}
+# Finding the states/ territories with the highest average percent low income
+highest_mean_poverty <- mean_low_income %>%
+  slice_max(mean_percent_low_income, n = 5) %>%
+  select(STATE_NAME, mean_percent_low_income)
+
+head(highest_mean_poverty, 1) # Showing the state/territory with the highest average low income percentage
+```
+The territory with the highest mean percent low income is Puerto Rico
+
+# Once you find the highest and lowest % low income make two subsets of data for these and aggregate income data by county and map to visualize 
+
+# After that do the same process for cancer risk
+
+
+```{r}
+# Filtering for only observation in the Virgin Islands
+virg_isl <- ejscreen %>%
+  filter(STATE_NAME == "Virgin Islands") 
+```
+
+```{r}
+# Filtering for only observations in Puerto Rico
+puerto_rico <- ejscreen %>%
+  filter(STATE_NAME == "Puerto Rico") 
+```
+
+```{r}
+# Finding average values for each county in the Virgin Islands
+virg_isl_cnty <- aggregate(virg_isl, by = list(virg_isl$CNTY_NAME), FUN = mean)
+```
+
+Returns all categories for St. Croix, St. Thomas, and St. John Islands
+
+```{r}
+# Finding average values for each county in PR
+pr_cnty <- aggregate(puerto_rico, by = list(puerto_rico$CNTY_NAME), FUN = mean)
+```
+
+Returns 78 counties in PR
+
