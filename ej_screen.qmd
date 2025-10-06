@@ -3,7 +3,7 @@ title: "EDS 223: Homework 1"
 subtitle: "Evaluating the Respiratory Health Index For Puerto Rico and Hawaii"
 author: "Nathalie Bonnet"
 date: 2025-10-6
-format: html
+format: docx
 warning: FALSE
 ---
 
@@ -29,6 +29,7 @@ mean_low_income <- ejscreen %>%
   summarise(mean_percent_low_income = mean(LOWINCPCT)) %>% 
   drop_na(mean_percent_low_income)
 ```
+
 
 ```{r}
 # Finding the states/ territories with the lowest average percent low income
@@ -70,11 +71,6 @@ puerto_rico <- ejscreen %>%
 
 
 ```{r}
-# Chunk to switch between plot and view mode
-tmap_mode("plot")
-```
-
-```{r}
 tmap::tm_shape(puerto_rico) +
   tm_graticules() +
   tm_polygons(fill = "RESP", 
@@ -82,6 +78,7 @@ tmap::tm_shape(puerto_rico) +
               breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5), 
               palette = "brewer.yl_or_br") + 
   tm_borders(col = "grey") +
+  tm_title("Respiratory Health Index Values in Puerto Rico") +
   tm_scalebar(position = c("right", "bottom"), 
               text.size = 0.2) +
   tm_legend(position = tm_pos_out("right")) +
@@ -99,7 +96,7 @@ tmap::tm_shape(hawaii) +
               palette = "brewer.yl_or_br") + 
              tm_borders(col = "grey") +
   tm_scalebar(position = c("left", "bottom"), 
-              text.size = 0.2) +
+              text.size = 0.3) +
 tm_legend(position = tm_pos_out("right")) +
-  tm_compass(position = tm_pos_out("right"))
+  tm_compass(position = "right")
 ```
