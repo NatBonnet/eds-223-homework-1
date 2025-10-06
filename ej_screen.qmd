@@ -1,11 +1,10 @@
 ---
 title: "EDS 223: Homework 1"
-subtitle: "Assessing Cancer Risk by % Low Income in Two States"
+subtitle: "Evaluating the Respiratory Health Index For Puerto Rico and Hawaii"
 author: "Nathalie Bonnet"
 date: 2025-10-6
-format: 
-  pdf:
-    toc: TRUE
+format: html
+warning: FALSE
 ---
 
 ```{r}
@@ -13,6 +12,7 @@ format:
 library(tidyverse)
 library(sf)
 library(here)
+library(tmap)
 ```
 
 
@@ -21,7 +21,6 @@ library(here)
 ejscreen <- sf::st_read(here::here("data", "ejscreen","EJSCREEN_2023_BG_StatePct_with_AS_CNMI_GU_VI.gdb")) 
 ```
 
-# Maybe look at the highest average per capita income state vs lowest and map air cancer risk vs. % low income 
 
 ```{r}
 # Subsetting to explore low income data by state
@@ -37,10 +36,8 @@ lowest_mean_poverty <- mean_low_income %>%
   slice_min(mean_percent_low_income, n = 5) %>%
   select(STATE_NAME, mean_percent_low_income)
 
-head(lowest_mean_poverty, 1) # Showing the state/territory with the lowest average low income percentage
+head(lowest_mean_poverty, 3) # Showing the state/territory with the lowest average low income percentage
 ```
-The U.S territory with the lowest mean percent low income is the U.S Virgin Islands
-
 
 ```{r}
 # Finding the states/ territories with the highest average percent low income
@@ -58,28 +55,51 @@ The territory with the highest mean percent low income is Puerto Rico
 
 
 ```{r}
-# Filtering for only observation in the Virgin Islands
-virg_isl <- ejscreen %>%
-  filter(STATE_NAME == "Virgin Islands") 
+# Filtering for only observation in Hawaii
+hawaii <- ejscreen %>%
+  filter(STATE_NAME == "Hawaii") %>% 
+  filter(ACSTOTPOP > 0)
 ```
 
 ```{r}
 # Filtering for only observations in Puerto Rico
 puerto_rico <- ejscreen %>%
-  filter(STATE_NAME == "Puerto Rico") 
+  filter(STATE_NAME == "Puerto Rico") %>% 
+  filter(ACSTOTPOP > 0)
+```
+
+
+```{r}
+# Chunk to switch between plot and view mode
+tmap_mode("plot")
 ```
 
 ```{r}
-# Finding average values for each county in the Virgin Islands
-virg_isl_cnty <- aggregate(virg_isl, by = list(virg_isl$CNTY_NAME), FUN = mean)
+tmap::tm_shape(puerto_rico) +
+  tm_graticules() +
+  tm_polygons(fill = "RESP", 
+              title = "Respiratory Hazard Index",
+              breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5), 
+              palette = "brewer.yl_or_br") + 
+  tm_borders(col = "grey") +
+  tm_scalebar(position = c("right", "bottom"), 
+              text.size = 0.2) +
+  tm_legend(position = tm_pos_out("right")) +
+  tm_compass()
 ```
 
-Returns all categories for St. Croix, St. Thomas, and St. John Islands
 
 ```{r}
-# Finding average values for each county in PR
-pr_cnty <- aggregate(puerto_rico, by = list(puerto_rico$CNTY_NAME), FUN = mean)
+
+tmap::tm_shape(hawaii) +
+  tm_graticules() +
+  tm_polygons(fill = "RESP", 
+              title = "Respiratory Hazard Index",
+              breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5), 
+              palette = "brewer.yl_or_br") + 
+             tm_borders(col = "grey") +
+  tm_scalebar(position = c("left", "bottom"), 
+              text.size = 0.2) +
+tm_legend(position = tm_pos_out("right")) +
+  tm_compass(position = tm_pos_out("right"))
 ```
-
-Returns 78 counties in PR
-
