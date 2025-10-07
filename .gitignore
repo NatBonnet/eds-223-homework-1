@@ -51,5 +51,7 @@ rsconnect/
 # Data folder
 data/
 
-# ej_screen_files folder
+# random ej_screen folders and files
 ej_screen_files/
+
+ej_screen.html/

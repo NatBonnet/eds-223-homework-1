@@ -6,10 +6,11 @@ This repository contains analyses and map outputs from EJScreen data. EJScreen p
 
 ## Folders and Files
 
-1. [data]()
-- ejscreen: contains environmental and demographic data frame (EJSCREEN_2023_BG_StatePct_with_AS_CNMI_GU_VI.gdb), metadata (EJSCREEN_2023_BG_Columns.xlsx), and technical documentation for EJScreen Environmental Justice Mapping and Screening Tool Version 2.2
+1. 
 
-2. ejscreen.qmd: contains the fata analysis and processing code 
+2. ejscreen.qmd: contains the data analysis and processing code to produce pdf output with maps
 
 3. ejscreen.html: the rendered output page 
+
+4. README.md: README document
 
