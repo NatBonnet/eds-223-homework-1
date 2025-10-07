@@ -13,6 +13,7 @@ message: false
 1.  Loading necessary libraries
 
 ```{r}
+#| output: false
 # Read in necessary libraries
 library(tidyverse)
 library(sf)
@@ -23,6 +24,7 @@ library(tmap)
 2.  Importing EJScreen data
 
 ```{r}
+#| output: false
 # read in geodatabase of EJScreen data at the Census Block Group level
 ejscreen <- sf::st_read(here::here("data", "ejscreen","EJSCREEN_2023_BG_StatePct_with_AS_CNMI_GU_VI.gdb")) 
 
@@ -33,6 +35,7 @@ ejscreen <- sf::st_read(here::here("data", "ejscreen","EJSCREEN_2023_BG_StatePct
 Objective: Look at income data as a potential risk factor for systemic environmental injustice by state and territory.
 
 ```{r}
+#| output: false
 # Creating a subset to explore data on % low income by state 
 mean_low_income <- ejscreen %>% 
   group_by(STATE_NAME) %>% 
@@ -45,6 +48,7 @@ mean_low_income <- ejscreen %>%
 1.  3 lowest average percentage low income states and territories
 
 ```{r}
+#| output: false
 # Finding the states/ territories with the lowest average percent low income
 lowest_mean_poverty <- mean_low_income %>%
   slice_min(mean_percent_low_income, n = 5) %>%
@@ -57,6 +61,7 @@ head(lowest_mean_poverty, 3)
 2.  3 highest average percentage low income states and territories
 
 ```{r}
+#| output: false
 # Finding the states/ territories with the highest average percent low income
 highest_mean_poverty <- mean_low_income %>%
   slice_max(mean_percent_low_income, n = 5) %>%
@@ -116,11 +121,11 @@ pr_map <- tm_shape(puerto_rico) + # Adding Puerto Rico spatial data
       breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5) 
     ), # Setting desired breaks in data bins
     fill.legend = tm_legend(
-      title = "Respiratory HI Range", # Add legend title
+      title = "Respiratory HI Range Values (ratio)", # Add legend title
       orientation = "landscape"), 
     lty = "blank", # Remove boundary lines on map for cleaner map appearance
     size = 2 # Set legend size
-  ) + tm_title("Respiratory Health Index (HI) Ratio Values in Puerto Rico") + # Set map title
+  ) + tm_title("Respiratory Health Index (HI) in Puerto Rico") + # Set map title
   tm_layout(
     bg.color = "lightblue") 
 ```
@@ -153,14 +158,14 @@ hawaii_map <- tm_shape(hawaii) + # Adding Hawaii spatial data
     ),
     # Setting desired breaks in data bins
     fill.legend = tm_legend(
-      title = "Respiratory HI Range", # Set legend title
+      title = "Respiratory HI Range Values (ratio)", # Set legend title
       orientation =  "portrait" # Legen is vertical instead of horizon
     ),
     # Legend values are horizontal instead of vertical
     lty = "blank",
     # Remove boundary lines on map for cleaner map appearance
     size = 2 # Set legend size
-  ) + tm_title("Respiratory Health Index (HI) Ratio Values in Hawaii") + # Set map title
+  ) + tm_title("Respiratory Health Index (HI) in Hawaii") + # Set map title
   tm_layout(bg.color = "lightblue") # Make background blue to represent water
 ```
 
