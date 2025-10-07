@@ -71,9 +71,7 @@ highest_mean_poverty <- mean_low_income %>%
 head(highest_mean_poverty, 3) 
 ```
 
-Results: 
-- The territory and states that have the lowest average percent of low income residents are the U.S Virgin Islands, New Hampshire, and Hawaii. 
-- The territories and state with the highest average percent of low income residents are Puerto Rico, American Samoa, and Mississippi.
+Results: - The territory and states that have the lowest average percent of low income residents are the U.S Virgin Islands, New Hampshire, and Hawaii. - The territories and state with the highest average percent of low income residents are Puerto Rico, American Samoa, and Mississippi.
 
 Goals: Compare Hawaii and Puerto Rico as island regions of the U.S with vastly different mean percent low income populations and statehood statuses.
 
@@ -133,7 +131,6 @@ pr_map <- tm_shape(puerto_rico) + # Adding Puerto Rico spatial data
 2.  Respiratory health index data for Hawaii
 
 ```{r}
-# Create tmap of Hawaii with Respiratory Health Index Data
 hawaii_map <- tm_shape(hawaii) + # Adding Hawaii spatial data
   tm_crs(4326) + # Setting proper coordinate reference system
   tm_graticules() + # Adding graticule coordinate lines
@@ -158,16 +155,17 @@ hawaii_map <- tm_shape(hawaii) + # Adding Hawaii spatial data
     ),
     # Setting desired breaks in data bins
     fill.legend = tm_legend(
-      title = "Respiratory HI Range Values (ratio)", # Set legend title
+      title = "Respiratory HI Range", # Set legend title
       orientation =  "portrait" # Legen is vertical instead of horizon
     ),
     # Legend values are horizontal instead of vertical
     lty = "blank",
     # Remove boundary lines on map for cleaner map appearance
     size = 2 # Set legend size
-  ) + tm_title("Respiratory Health Index (HI) in Hawaii") + # Set map title
+  ) + tm_title("Respiratory Health Index (HI) Ratio Values in Hawaii") + # Set map title
   tm_layout(bg.color = "lightblue") # Make background blue to represent water
 ```
+
 
 ## Results
 
@@ -190,9 +188,9 @@ Many variables influence respiratory health data, and they are limited by only o
 # References
 
 | Data | Citation | Source |
-|------------------|------------------|-----------------------------------|
+|-------------------|-------------------|-----------------------------------|
 | EJScreen Data | United States Environmental Protection Agency. 2015. EJSCREEN. Retrieved: 10/04/2025, from url (http://www.epa.gov/ejscreen) | https://www.epa.gov/ejscreen |
 | Puerto Rico Wikipedia | Wikimedia Foundation. (2025, September 24). Geography of Puerto Rico. Wikipedia. https://en.wikipedia.org/wiki/Geography_of_Puerto_Rico | https://en.wikipedia.org/wiki/Geography_of_Puerto_Rico |
 | Hawaii Island Wikipedia | Wikimedia Foundation. (2025, September 30). Hawaiʻi (island). Wikipedia. https://en.wikipedia.org/wiki/Hawai%CA%BBi\_(island) | https://en.wikipedia.org/wiki/Hawai%CA%BBi\_(island) |
 | Google Maps: Daniel K. Inouye International Airport | Google. Daniel K. Inouye International Airport. Google maps. https://www.google.com/maps/place/Daniel+K.+Inouye+International+Airport/@21.3242132,-157.9509347,31366m/data=!3m1!1e3!4m14!1m7!3m6!1s0x7c006632db726b03:0xd9587d69906fcbc3!2zT-KAmGFodQ!8m2!3d21.4389123!4d-158.0000565!16zL20vMGRmY24!3m5!1s0x7c006f943168f55f:0x7ed111b1cbf331df!8m2!3d21.3186623!4d-157.9254018!16zL20vMDFuNWZ3?entry=ttu&g_ep=EgoyMDI1MTAwMS4wIKXMDSoASAFQAw%3D%3D | https://www.google.com/maps/place/Daniel+K.+Inouye+International+Airport/@21.3242132,-157.9509347,31366m/data=!3m1!1e3!4m14!1m7!3m6!1s0x7c006632db726b03:0xd9587d69906fcbc3!2zT-KAmGFodQ!8m2!3d21.4389123!4d-158.0000565!16zL20vMGRmY24!3m5!1s0x7c006f943168f55f:0x7ed111b1cbf331df!8m2!3d21.3186623!4d-157.9254018!16zL20vMDFuNWZ3?entry=ttu&g_ep=EgoyMDI1MTAwMS4wIKXMDSoASAFQAw%3D%3D |
-| EPA AirTox Overview  | Environmental Protection Agency. AirToxScreen Overview. EPA. https://www.epa.gov/AirToxScreen/airtoxscreen-overview  | https://www.epa.gov/AirToxScreen/airtoxscreen-overview |
+| EPA AirTox Overview | Environmental Protection Agency. AirToxScreen Overview. EPA. https://www.epa.gov/AirToxScreen/airtoxscreen-overview | https://www.epa.gov/AirToxScreen/airtoxscreen-overview |
