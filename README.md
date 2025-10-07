@@ -7,9 +7,9 @@ This repository contains analyses and map outputs from EJScreen data. EJScreen p
 ## Data Access
 Data was accessed from the Environmental Protection Agency's public database website, and all other sources were publically available. 
 
-## Author
-Nathalie Bonnet
+## Author: Nathalie Bonnet
 Instructor: Annie Adams
+
 Teaching Assistant: Ale Vidal Meza
 
 ## Folders and Files
