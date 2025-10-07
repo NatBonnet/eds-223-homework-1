@@ -3,7 +3,9 @@ title: "EDS 223: Homework 1"
 subtitle: "Evaluating the Respiratory Health Index For Puerto Rico and Hawaii"
 author: "Nathalie Bonnet"
 date: 2025-10-6
-format: docx
+format: 
+  pdf:
+    documentclass: report
 warning: FALSE
 ---
 
@@ -19,11 +21,12 @@ library(tmap)
 ```{r}
 # read in geodatabase of EJScreen data at the Census Block Group level
 ejscreen <- sf::st_read(here::here("data", "ejscreen","EJSCREEN_2023_BG_StatePct_with_AS_CNMI_GU_VI.gdb")) 
+
 ```
 
 
 ```{r}
-# Subsetting to explore low income data by state
+# Creating a subset to explore data on % low income by state 
 mean_low_income <- ejscreen %>% 
   group_by(STATE_NAME) %>% 
   summarise(mean_percent_low_income = mean(LOWINCPCT)) %>% 
@@ -37,7 +40,8 @@ lowest_mean_poverty <- mean_low_income %>%
   slice_min(mean_percent_low_income, n = 5) %>%
   select(STATE_NAME, mean_percent_low_income)
 
-head(lowest_mean_poverty, 3) # Showing the state/territory with the lowest average low income percentage
+# Showing the state/territory with the lowest average low income percentage
+head(lowest_mean_poverty, 3) 
 ```
 
 ```{r}
@@ -46,13 +50,10 @@ highest_mean_poverty <- mean_low_income %>%
   slice_max(mean_percent_low_income, n = 5) %>%
   select(STATE_NAME, mean_percent_low_income)
 
-head(highest_mean_poverty, 1) # Showing the state/territory with the highest average low income percentage
+# Showing the state/territory with the highest average low income percentage
+head(highest_mean_poverty, 1) 
 ```
-The territory with the highest mean percent low income is Puerto Rico
 
-# Once you find the highest and lowest % low income make two subsets of data for these and aggregate income data by county and map to visualize 
-
-# After that do the same process for cancer risk
 
 
 ```{r}
@@ -69,34 +70,46 @@ puerto_rico <- ejscreen %>%
   filter(ACSTOTPOP > 0)
 ```
 
+```{r}
+sf::st_geometry(puerto_rico)
+```
+
 
 ```{r}
-tmap::tm_shape(puerto_rico) +
-  tm_graticules() +
+
+tm_shape(puerto_rico) +
+  tm_crs(4326)+ 
+  
   tm_polygons(fill = "RESP", 
-              title = "Respiratory Hazard Index",
-              breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5), 
-              palette = "brewer.yl_or_br") + 
-  tm_borders(col = "grey") +
+              fill.scale = tm_scale(values = c("#FFEBE6", "#FF9C80", 
+                                               "#FF5B2E", "#D12D00", 
+                                               "#751900"), 
+                                    breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5)), 
+              fill.legend = tm_legend(title = "Respiratory HI",
+                                      tm_pos_out = "right"), 
+             lty = "blank", 
+              size = 2) +
+  tm_graticules() +
   tm_title("Respiratory Health Index Values in Puerto Rico") +
-  tm_scalebar(position = c("right", "bottom"), 
-              text.size = 0.2) +
-  tm_legend(position = tm_pos_out("right")) +
-  tm_compass()
+  tm_layout(bg.color = "lightblue") 
+  
 ```
-
-
 ```{r}
-
-tmap::tm_shape(hawaii) +
+tm_shape(hawaii) + 
+  tm_crs(4326)+ 
   tm_graticules() +
   tm_polygons(fill = "RESP", 
-              title = "Respiratory Hazard Index",
-              breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5), 
-              palette = "brewer.yl_or_br") + 
-             tm_borders(col = "grey") +
-  tm_scalebar(position = c("left", "bottom"), 
-              text.size = 0.3) +
-tm_legend(position = tm_pos_out("right")) +
-  tm_compass(position = "right")
+              fill.scale = tm_scale(values = c("#FFEBE6",
+                                               "#FF9C80",
+                                               "#FF5B2E",
+                                               "#D12D00",
+                                               "#751900", 
+                                               "#8AEA92", 
+                                               "#80ADA0",
+                                               "#5F5566", 
+                                               "#583748", 
+                                               "#000000"), 
+                                    breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1)), fill.legend = tm_legend(title = "Respiratory HI", tm_pos_out = "right"), lty = "blank", size = 2) + tm_title("Respiratory Health Index Values in Hawaii") + 
+  tm_layout(bg.color = "lightblue")
 ```
+
